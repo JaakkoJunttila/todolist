@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Todolist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body onload="rangeOutput.value = Math.floor(rangeInput.value/60) + ' hours, ' +  (rangeInput.value/60 - Math.floor(rangeInput.value/60)) * 60 + ' minutes'">
+	<div class="col-md-5">
+		<form th:object="${todo}" th:action="@{save}" action="#" method="post" class="form-horizontal" >
+			  <div class="form-group">
+			    <h1 class="col-sm-10">New Task</h1>
+			  </div>
+			  <div class="form-group">
+			    <label for="task" class="col-sm-10">Task</label>
+			    <div class="col-sm-10">
+			      <input class="form-control" type="text" id="task" th:field="*{task}" placeholder="whats up?"/>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="rangeInput" class="col-sm-10">Workload</label>
+			    <div class="col-sm-10">
+			      <input class="form-control" type="range" min="0" max="1200" step="15" value="0" id="rangeInput" th:field="*{workload}"
+			      oninput="rangeOutput.value = Math.floor(rangeInput.value/60) + ' hours, ' +  (rangeInput.value/60 - Math.floor(rangeInput.value/60)) * 60 + ' minutes'"/>
+			      <output id="rangeOutput"></output>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="deadline" class="col-sm-10">Deadline</label>
+			    <div class="col-sm-10">
+			      <input type="date" class="form-control" id="deadline" name="deadline" th:field="*{deadline}"/>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <div class="col-sm-10">
+			      <input type="submit" class="btn btn-default" value="Save">
+			    </div>
+			  </div>
+			  <div style="visibility:hidden">
+			    <div>
+				    <select th:field="*{user}">
+	       				<option th:if="${user.username} == ${#httpServletRequest.remoteUser}" th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}"></option>
+	    			</select>
+    		  	</div>
+			  </div>
+			</form>
+	</div> 
+	 	
+</body>
+</html>
+

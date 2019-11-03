@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Todolist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="col-md-8">
+		<h3>[[${#httpServletRequest.remoteUser}]]'s todos:</h3>
+
+		<form th:action="@{/logout}" style="margin: 20px 0px 40px" method="post">
+			<input type="submit" value="Sign Out" class="btn btn-sm btn-danger"/>
+		</form>
+    <table class="table table-striped">
+		<tr>
+		    <th>Task</th>
+		    <th>Workload</th>
+		    <th>Deadline</th>
+		    <th>Days left</th>
+		    <th>Status</th>
+		    <th> </th>
+		    <th> </th>
+		    
+		</tr>  
+    	<tr th:each = "todo : ${todos}" th:object="${todo}" th:if="${todo.user.username} == ${#httpServletRequest.remoteUser}">
+    		<td style="min-width: 100px" th:text="${todo.task}"></td>
+    		<td style="min-width: 100px" th:text="${todo.workload}/60 + ' hours'"></td>
+    		<td style="min-width: 100px" th:text="${todo.deadline}"></td>
+    		<td class="text-danger" th:if="${todo.due &lt; 0}" style="min-width: 100px" th:text="'- ' + ${todo.due}*(-1)"></td>
+    		<td class="text-warning" th:if="${todo.due == 0}" style="min-width: 100px" th:text="due + ' ' + today"></td>
+    		<td class="text-success" th:if="${todo.due &gt; 0}" style="min-width: 100px" th:text="'+ ' + ${todo.due}"></td>
+ 			<td>
+	 			<a th:if="${todo.state} == 'to do'" th:href="@{/setstate/{id}(id=${todo.id})}" class="btn btn-xs btn-primary" th:text="${todo.state}"></a>
+				<a th:if="${todo.state} == 'doing'" th:href="@{/setstate/{id}(id=${todo.id})}" class="btn btn-xs btn-info" th:text="${todo.state}"></a>
+	 			<a th:if="${todo.state} == 'done'" th:href="@{/setstate/{id}(id=${todo.id})}" class="btn btn-xs btn-success" th:text="${todo.state}"></a>
+ 			</td>
+ 			<td><a th:href="@{/delete/{id}(id=${todo.id})}" class="btn btn-xs btn-danger">Delete</a></td>
+ 			<td><a th:href="@{/edit/{id}(id=${todo.id})}" class="btn btn-xs btn-warning">Edit</a></td>    		
+    	</tr>
+     </table>
+	 <a href="/add" class="btn btn-sm btn-primary">Add a task</a> 
+</div>	    	
+</body>
+</html>
